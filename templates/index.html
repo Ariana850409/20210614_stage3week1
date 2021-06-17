@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圖文留言板</title>
+    <link type="text/css" href="../static/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="header">圖文留言板</div>
+    <div class="wrap">
+        <div class="edit">
+            <div>
+                <span>文字內容</span><textarea type="text" placeholder="請輸入文字" class="textInput"></textarea>
+            </div>
+            <div>
+                <span>圖片檔案</span><input type="file" accept="image/*" id="uploadPic" onchange="handleFiles(this.files)">
+            </div>
+        </div>
+        <div class="preview">
+            <div>圖片預覽：</div>
+        </div>
+    </div>
+    <div class="submit-div">
+        <button onclick="submit();" class="submit-btn">送出</button>
+        <div class="errormsg"></div>
+    </div>
+    <main></main>
+
+
+
+    <script type="text/javascript" src="../static/index.js"></script>
+
+</body>
+
+</html>
