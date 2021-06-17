@@ -20,13 +20,8 @@ def index():
 def upload():
     content = request.form.get('text')
     picFile = request.files.get('pic')
-    filename = picFile.filename
-    s3.upload_file(
-        Bucket=os.getenv('S3_Bucket'),
-        Filename=filename,
-        Key='messageBoard/{}'.format(filename)
-    )
-    print(content, picFile, filename)
+    s3.upload_fileobj(picFile, "first-time-test",
+                      picFile.filename, ExtraArgs={'ACL': 'public-read'})
     return "success"
 
 
