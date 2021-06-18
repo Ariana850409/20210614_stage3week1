@@ -1,16 +1,16 @@
 from flask import *
-import boto3
+# import boto3
 import pymysql
 import threading
 import os
 from dotenv import load_dotenv
 load_dotenv()
 app = Flask(__name__)
-s3 = boto3.client(
-    's3',
-    aws_access_key_id=os.getenv('S3_Key'),
-    aws_secret_access_key=os.getenv('S3_Secret'),
-)
+# s3 = boto3.client(
+#     's3',
+#     aws_access_key_id=os.getenv('S3_Key'),
+#     aws_secret_access_key=os.getenv('S3_Secret'),
+# )
 
 # table=content -> id(int),picture(varchar),message(varchar)
 conn = pymysql.connect(
@@ -51,9 +51,9 @@ def upload():
     try:
         content = request.form.get('text')
         picFile = request.files.get('pic')
-        s3.upload_fileobj(picFile, "first-time-test",
-                          picFile.filename, ExtraArgs={'ACL': 'public-read'})
-        cdnPath = "http://d1ggvmbnmq1itc.cloudfront.net"+picFile.filename
+        # s3.upload_fileobj(picFile, "first-time-test",
+        #                   picFile.filename, ExtraArgs={'ACL': 'public-read'})
+        cdnPath = "http://d1ggvmbnmq1itc.cloudfront.net/"+picFile.filename
         mycursor = conn.cursor()
         conn.ping(reconnect=True)
         thread_lock = threading.Lock()
