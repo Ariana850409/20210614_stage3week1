@@ -1,6 +1,7 @@
 from flask import *
 import boto3
 import pymysql
+import threading
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -12,7 +13,7 @@ s3 = boto3.client(
 )
 
 # table=content -> id(int),picture(varchar),message(varchar)
-board_db = pymysql.connect(
+conn = pymysql.connect(
     host=os.getenv('RDS_Host'), user=os.getenv('RDS_User'), password=os.getenv('RDS_Password'), database="Message")
 
 
@@ -24,10 +25,13 @@ def index():
 @app.route("/download")
 def download():
     try:
-        mycursor = board_db.cursor()
-        sql = "select (picture,message) from content"
+        mycursor = conn.cursor()
+        conn.ping(reconnect=True)
+        thread_lock = threading.Lock()
+        thread_lock.acquire()
+        sql = "select picture,message from content"
         mycursor.execute(sql)
-        myresult = mycursor.fetchall
+        myresult = mycursor.fetchall()
         result = []
         for x in myresult:
             y = {
@@ -35,7 +39,8 @@ def download():
                 "text": x[1]
             }
             result.append(y)
-        board_db.close()
+        conn.close()
+        thread_lock.release()
         return jsonify({"data": result})
     except:
         return jsonify({"error": True})
@@ -49,12 +54,15 @@ def upload():
         s3.upload_fileobj(picFile, "first-time-test",
                           picFile.filename, ExtraArgs={'ACL': 'public-read'})
         cdnPath = "http://d1ggvmbnmq1itc.cloudfront.net"+picFile.filename
-        mycursor = board_db.cursor()
+        mycursor = conn.cursor()
+        conn.ping(reconnect=True)
+        thread_lock = threading.Lock()
+        thread_lock.acquire()
         sql = "insert into content(picture,message) values('%s','%s')" % (
             cdnPath, content)
         mycursor.execute(sql)
-        board_db.commit()
-        board_db.close()
+        conn.commit()
+        thread_lock.release()
         return jsonify({"ok": True})
     except:
         return jsonify({"error": True})
