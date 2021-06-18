@@ -9,9 +9,9 @@ function getData() {
             if (result.error) {
                 console.log("伺服器內部錯誤");
             } else {
-                if (result.data.pic == null) {
+                if (result.data.length == 0) {
                     console.log("尚無任何留言");
-                } else if (result.data.pic != null) {
+                } else if (result.data.length != 0) {
                     for (let i = 0; i < result.data.length; i++) {
                         let main = document.querySelector('main');
                         let hr = document.createElement("hr");
