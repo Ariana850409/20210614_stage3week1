@@ -21,7 +21,7 @@ function getData() {
                         main.appendChild(hr);
                         main.appendChild(cell);
                         text.className = 'picText';
-                        text.textContent = result.data[i].text;
+                        text.innerHTML = result.data[i].text;
                         cell.appendChild(text);
                         img.classList.add("obj");
                         img.src = result.data[i].pic;
@@ -53,6 +53,7 @@ function submit() {
     console.log(selectedPic);
     let content = document.querySelector('.textInput').value;
     if (selectedPic != undefined && content != "") {
+        content = content.replace(/\n/g, "<br>");
         document.querySelector('.errormsg').style.display = "none";
         let preview = document.querySelector(".preview");
         let previewPic = document.querySelector(".previewPic");
