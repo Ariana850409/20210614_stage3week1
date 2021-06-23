@@ -17,6 +17,11 @@ conn = pymysql.connect(
     host=os.getenv('RDS_Host'), user=os.getenv('RDS_User'), password=os.getenv('RDS_Password'), database="Message")
 
 
+@app.route("/loaderio-6b03c42d9e4a6188ed4eff7825f9122f")
+def loaderio():
+    return "loaderio-6b03c42d9e4a6188ed4eff7825f9122f"
+
+
 @app.route("/")
 def index():
     return render_template("index.html")
